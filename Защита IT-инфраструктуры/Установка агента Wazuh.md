@@ -1,6 +1,6 @@
 > Чтобы поставить агента есть два способа: через ```apt install``` и через ```deb-пакет```, предоставляемый самим Wazuh. Рассмортим оба варианта.
 
-### Через apt install
+## Через apt install
 
 Ставим пакет:
 
@@ -64,4 +64,4 @@ systemctl enable wazuh-agent
 systemctl start wazuh-agent
 ```
 
-### Через deb-пакет
+## Через deb-пакет
