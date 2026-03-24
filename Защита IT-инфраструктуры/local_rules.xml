@@ -1,0 +1,79 @@
+<!-- Local rules -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015, Wazuh Inc. -->
+
+<!-- Example -->
+<group name="local,syslog,sshd,">
+
+  <!--
+  Dec 10 01:02:02 host sshd[1234]: Failed none for root from 1.1.1.1 port 1066 ssh2
+  -->
+  <rule id="100001" level="5">
+    <if_sid>5716</if_sid>
+    <srcip>1.1.1.1</srcip>
+    <description>sshd: authentication failed from IP 1.1.1.1.</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+</group>
+
+<group name="routers">
+
+  <!-- Сканирование портов в ЦОДе -->
+  <rule id="86601" overwrite="yes" level="10">
+    <field name="alert.signature">PORT SCAN SYN</field>
+    <description>Router detected port scan</description>
+  </rule>
+
+  <!-- Брутфорс SSH в ЦОДе -->
+  <rule id="300002" level="10">
+    <field name="alert.signature">SSH BRUTE FORCE</field>
+    <description>Router detected brute force attack</description>
+  </rule>
+
+</group>
+
+<group name="custom,ssh">
+
+  <!-- Базовое событие: неудачный вход -->
+  <rule id="100002" level="5">
+    <if_sid>5710</if_sid>
+    <description>SSH failed login</description>
+  </rule>
+
+  <!-- Корреляция: брутфорс SSH -->
+  <rule id="100003" level="10" frequency="5" timeframe="300">
+    <if_matched_sid>100002</if_matched_sid>
+    <description>SSH brute force detected (5 attempts in 5 minutes)</description>
+
+  <mitre>
+    <id>T1110</id>
+  </mitre>
+  </rule>
+
+</group>
+
+<group name="fim">
+
+  <!-- Изменения в /etc/passwd -->
+  <rule id="400001" level="12">
+    <if_group>syscheck</if_group>
+    <field name="syscheck.path">/etc/passwd</field>
+    <description>Critical file modified: /etc/passwd</description>
+  </rule>
+
+  <!-- Изменения в /etc/shadow -->
+  <rule id="400002" level="12">
+    <if_group>syscheck</if_group>
+    <field name="syscheck.path">/etc/shadow</field>
+    <description>Critical file modified: /etc/shadow</description>
+  </rule>
+
+  <!-- Изменения в SSH-конфигах -->
+  <rule id="400003" level="12">
+    <if_group>syscheck</if_group>
+    <field name="syscheck.path">/etc/ssh</field>
+    <description>Critical SSH config modified</description>
+  </rule>
+
+</group>
