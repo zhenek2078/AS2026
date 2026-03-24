@@ -172,7 +172,7 @@ http  .authorizeHttpRequests().requestMatchers("/admin/**").hasIpAddress("127.0.
 
 ## Вариант 7: firewall
 
-Если админка на отдельном порту, например, 80808, то просто добавляем правило:
+Если админка на отдельном порту, например, 8080, то просто добавляем правило:
 
 ```
 nft add rule inet filter input tcp dport 8080 ip saddr != 127.0.0.1 drop
