@@ -56,6 +56,8 @@ ls -la /run/docker.sock
 curl --unix-socket /run/docker.sock http://localhost/images/json
 ```
 
+> Или вместо /run/docker.sock используем ```/var/run/docker.sock```.
+
 Заодно получим все доступные images.
 
 Значит можем создать новый контейнер с выполнением docker escape через mount /dev/sda1:
